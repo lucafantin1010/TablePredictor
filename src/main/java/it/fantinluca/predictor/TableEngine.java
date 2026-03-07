@@ -50,4 +50,37 @@ public class TableEngine {
             awayTeam.setPoints(awayTeam.getPoints() + 1);
         }
     }
+
+    /**
+     * Prints the league table formatted  in the console.
+     * @param teams The Map containing all the teams.
+     */
+    public void printTable(Map<String, Team> teams) {
+        // Convert the Map values into a List so we can sort it
+        java.util.List<Team> table = new java.util.ArrayList<>(teams.values());
+
+        // Sort the list using Comparator
+        table.sort(new StandardTableComparator());
+
+        // Print the header using printf for alignment
+        System.out.println("\n=======================================================");
+        System.out.printf("%-3s | %-15s | %-3s | %-3s | %-3s | %-3s | %-3s\n",
+                "Pos", "Team", "Pts", "Pld", "GF", "GA", "GD");
+        System.out.println("=======================================================");
+
+        // Loop through the sorted list and print each team
+        int position = 1;
+        for (Team team : table) {
+            System.out.printf("%-3d | %-15s | %-3d | %-3d | %-3d | %-3d | %-3d\n",
+                    position,
+                    team.getName(),
+                    team.getPoints(),
+                    team.getMatchesPlayed(),
+                    team.getGoalsFor(),
+                    team.getGoalsAgainst(),
+                    team.getGoalDifference());
+            position++;
+        }
+        System.out.println("=======================================================\n");
+    }
 }

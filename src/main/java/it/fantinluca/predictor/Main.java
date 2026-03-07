@@ -45,5 +45,8 @@ public class Main {
 
         System.out.println("Goal Difference for Juve: " + juventus.getGoalDifference());
         System.out.println("Goal Difference for Pisa: " + pisa.getGoalDifference());
+
+        //print the standings
+        engine.printTable(league);
     }
 }
