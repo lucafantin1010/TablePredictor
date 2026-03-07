@@ -1,0 +1,26 @@
+[
+  {
+    "homeTeam": "Juventus",
+    "awayTeam": "Napoli",
+    "matchday": 1,
+    "homeScore": 0,
+    "awayScore": 0,
+    "isPlayed": false
+  },
+  {
+    "homeTeam": "Milan",
+    "awayTeam": "Inter",
+    "matchday": 1,
+    "homeScore": 0,
+    "awayScore": 0,
+    "isPlayed": false
+  },
+  {
+    "homeTeam": "Inter",
+    "awayTeam": "Juventus",
+    "matchday": 2,
+    "homeScore": 0,
+    "awayScore": 0,
+    "isPlayed": false
+  }
+]
