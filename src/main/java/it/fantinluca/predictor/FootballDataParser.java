@@ -33,7 +33,6 @@ public class FootballDataParser {
             for (JsonElement element : matchesArray) {
                 JsonObject matchObj = element.getAsJsonObject();
 
-                // Safe extraction of team objects
                 JsonObject homeObj = matchObj.has("homeTeam") ? matchObj.getAsJsonObject("homeTeam") : new JsonObject();
                 JsonObject awayObj = matchObj.has("awayTeam") ? matchObj.getAsJsonObject("awayTeam") : new JsonObject();
 
@@ -44,7 +43,6 @@ public class FootballDataParser {
 
                 Match match = new Match(homeTeam, awayTeam, matchday);
 
-                // Safe extraction of crest URLs with fallback
                 String defaultCrest = "https://ui-avatars.com/api/?background=random&color=fff&rounded=true&bold=true&name=";
 
                 if (homeObj.has("crest") && !homeObj.get("crest").isJsonNull()) {
@@ -67,8 +65,16 @@ public class FootballDataParser {
 
                     if (fullTime != null && fullTime.has("home") && !fullTime.get("home").isJsonNull() &&
                             fullTime.has("away") && !fullTime.get("away").isJsonNull()) {
+
                         match.setHomeScore(fullTime.get("home").getAsInt());
                         match.setAwayScore(fullTime.get("away").getAsInt());
+
+                        // --- Manual Correction Layer (Data Source Quality Control) ---
+                        // Fixing Lecce vs Cremonese (Matchday 28) - API incorrectly reports 2-2
+                        if (homeTeam.contains("Lecce") && awayTeam.contains("Cremonese") && matchday == 28) {
+                            match.setHomeScore(2);
+                            match.setAwayScore(1);
+                        }
                     }
                 }
 
