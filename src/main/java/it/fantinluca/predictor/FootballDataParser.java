@@ -75,6 +75,11 @@ public class FootballDataParser {
                             match.setHomeScore(2);
                             match.setAwayScore(1);
                         }
+                        // Fixing Bologna vs Verona (Matchday 28) - API incorrectly reports 1-3
+                        if (homeTeam.contains("Bologna") && awayTeam.contains("Verona") && matchday == 28) {
+                            match.setHomeScore(1);
+                            match.setAwayScore(2);
+                        }
                     }
                 }
 
