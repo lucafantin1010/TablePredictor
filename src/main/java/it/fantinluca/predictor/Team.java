@@ -70,5 +70,5 @@ public class Team {
         this.matchesPlayed = matchesPlayed;
     }
 
-    // TODO: Generate Getters and Setters here
+
 }

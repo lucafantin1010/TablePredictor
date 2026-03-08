@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serie A Predictor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="main-header">
+    <h1>🏆 Scudetto Predictor</h1>
+</header>
+
+<div class="app-container">
+    <div id="table-container" class="panel">
+        <p style="text-align: center;">Caricamento classifica...</p>
+    </div>
+
+    <div id="matches-panel" class="panel">
+        <div class="matchday-header">
+            <button id="prev-matchday" class="nav-btn">◀</button>
+            <div class="select-wrapper">
+                <label for="matchday-select">Giornata: </label>
+                <select id="matchday-select"></select>
+            </div>
+            <button id="next-matchday" class="nav-btn">▶</button>
+        </div>
+        <div id="matches-container">
+            <p style="text-align: center;">Caricamento partite...</p>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

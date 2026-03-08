@@ -1,52 +1,50 @@
 package it.fantinluca.predictor;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * Entry point for local testing without the web server.
+ */
 public class Main {
+
     public static void main(String[] args) {
+        String apiToken = System.getenv("FOOTBALL_API_TOKEN");
 
-        // 1. Create our Teams (starting at day 0: 0 points, 0 goals, etc.)
-        Team juventus = new Team(1, "Juventus", 0, 0, 0, 0);
-        Team pisa = new Team(2, "Pisa", 0, 0, 0, 0);
+        if (apiToken == null || apiToken.isEmpty()) {
+            System.err.println("ERROR: Please set the FOOTBALL_API_TOKEN environment variable.");
+            return;
+        }
 
-        // 2. Put them in our "Database" (The Map)
-        // The key MUST match the exact name we will use in the matches
+        System.out.println("Fetching data from API...");
+        FootballDataClient client = new FootballDataClient(apiToken);
+        String json = client.fetchMatchesJson();
+
+        if (json.contains("\"error\"")) {
+            System.err.println("Failed to fetch data: " + json);
+            return;
+        }
+
+        System.out.println("Parsing matches...");
+        FootballDataParser parser = new FootballDataParser();
+        List<Match> allMatches = parser.parseMatches(json);
+
         Map<String, Team> league = new HashMap<>();
-        league.put("Juventus", juventus);
-        league.put("Pisa", pisa);
+        int teamIdCounter = 1;
 
-        // 3. Print pre-match situation
-        System.out.println("--- BEFORE THE MATCH ---");
-        System.out.println("Juventus points: " + juventus.getPoints());
-        System.out.println("Pisa points: " + pisa.getPoints());
+        for (Match m : allMatches) {
+            league.putIfAbsent(m.getHomeTeam(), new Team(teamIdCounter++, m.getHomeTeam(), 0, 0, 0, 0));
+            league.putIfAbsent(m.getAwayTeam(), new Team(teamIdCounter++, m.getAwayTeam(), 0, 0, 0, 0));
+        }
 
-        // 4. Create the match: Juventus vs Pisa, Matchday 1
-        Match match1 = new Match("Juventus", "Pisa", 1);
-
-        // Let's say Juventus wins 2-0
-        match1.setHomeScore(2);
-        match1.setAwayScore(0);
-        match1.setPlayed(true);
-
-        // 5. Fire up the Engine!
         TableEngine engine = new TableEngine();
-        engine.processMatch(match1, league);
 
-        // 6. Print post-match situation
-        System.out.println("\n--- AFTER THE MATCH ---");
-        System.out.println("Juventus points: " + juventus.getPoints() +
-                " (Goals For: " + juventus.getGoalsFor() +
-                ", Goals Against: " + juventus.getGoalsAgainst() + ")");
+        for (Match m : allMatches) {
+            engine.processMatch(m, league);
+        }
 
-        System.out.println("Pisa points: " + pisa.getPoints() +
-                " (Goals For: " + pisa.getGoalsFor() +
-                ", Goals Against: " + pisa.getGoalsAgainst() + ")");
-
-        System.out.println("Goal Difference for Juve: " + juventus.getGoalDifference());
-        System.out.println("Goal Difference for Pisa: " + pisa.getGoalDifference());
-
-        //print the standings
+        System.out.println("--- CURRENT SERIE A TABLE ---");
         engine.printTable(league);
     }
 }
