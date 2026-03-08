@@ -304,6 +304,20 @@ function resetPredictions() {
         console.log("Predictions reset successfully.");
     }
 }
+/**
+ * Opens WhatsApp to share the app link with friends.
+ */
+function shareOnWhatsApp() {
+    const url = window.location.href;
+    const text = `Guarda questo Serie A Predictor! 🏆 Sto decidendo la classifica, provalo anche tu: ${url}`;
+
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+
+    window.open(whatsappUrl, '_blank');
+}
+
+
+document.getElementById('share-wa-btn').addEventListener('click', shareOnWhatsApp);
 
 document.getElementById('reset-btn').addEventListener('click', resetPredictions);
 document.addEventListener("DOMContentLoaded", fetchMatches);
