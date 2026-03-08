@@ -283,4 +283,27 @@ function renderTable(tableData) {
     html += `</tbody></table>`;
     document.getElementById('table-container').innerHTML = html;
 }
+/**
+ * Resets all user-made predictions while keeping the official results.
+ */
+function resetPredictions() {
+    if (confirm("Sei sicuro di voler cancellare tutti i tuoi pronostici?")) {
+        allMatches.forEach(match => {
+            if (match.isPredicted) {
+                match.isPredicted = false;
+                match.homeScore = 0;
+                match.awayScore = 0;
+            }
+        });
+
+
+        const currentTable = calculateTable(allMatches);
+        renderTable(currentTable);
+        renderMatches();
+
+        console.log("Predictions reset successfully.");
+    }
+}
+
+document.getElementById('reset-btn').addEventListener('click', resetPredictions);
 document.addEventListener("DOMContentLoaded", fetchMatches);
